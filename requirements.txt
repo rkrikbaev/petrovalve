@@ -1,0 +1,5 @@
+Flask==1.1.2
+gunicorn==19.7.1
+prometheus-client
+livereload
+werkzeug

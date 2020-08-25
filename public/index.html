@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservice for data generating</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<header id="flex-header">
+    <div class="cloud-header"></div>
+    <h1>Microservice for process data modeling</h1>
+</header>
+<main>
+    <div>
+        <p>
+            <a href="{{ url_for('.download_file') }}">Download .csv file</a>
+        </p>
+    </div>
+    <div>
+        <form action = "http://localhost:3000/uploader" method = "POST"
+              enctype = "multipart/form-data">
+            <input type = "file" name = "file" />
+            <input type = "submit"/>
+        </form>
+    </div>
+</main>
+</body>
+</html>
