@@ -11,12 +11,10 @@
 </header>
 <main>
     <div>
-        <p>
-            <a href="{{ url_for('.download_file') }}">Download .csv file</a>
-        </p>
+        <h2>Select .csv file to download as Dataframe</h2>
     </div>
     <div>
-        <form action = "http://localhost:3000/uploader" method = "POST"
+        <form action = "http://localhost:3000/uploader" method = "GET"
               enctype = "multipart/form-data">
             <input type = "file" name = "file" />
             <input type = "submit"/>
