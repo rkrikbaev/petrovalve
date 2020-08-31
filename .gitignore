@@ -1,5 +1,4 @@
-tmp/
-.DS_Store
+.DS_Store/
 *.pyc
 *.egg-info
 server/localdev-config.json
