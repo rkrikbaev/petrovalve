@@ -3,7 +3,20 @@ import math
 
 
 # valve function
-def valve_function(P1,P2,MW,K,T,Z1,Cmd,CvMAX):
+def function(P1,P2,T):
+
+  P1 = P1*100000 + 101325   # Pa, absolut pressure
+  P2 = P2*100000 + 101325   # Pa, absolut pressure
+
+  # fludi parameters (water)
+  MW = 16.04246          # g/mol, molecular weight
+  K  = 1.306150523753    # -    , specific heat coefficient
+  Z1 = 0.9866770978914   # -    , compressibility factor ( 5 barg)
+
+  # valve parameters
+  Cmd = 1
+  CvMAX = 100
+
   # constant
   Xt = 0.7
   Fp = 1
@@ -33,26 +46,15 @@ def valve_function(P1,P2,MW,K,T,Z1,Cmd,CvMAX):
   
   return massflow/3600
 
-# valve calculation Programe
 
-#input
-P1 = 5                    # barg
-P2 = 4                    # barg
-T  = 20                   # °C
+# #input
+# P1 = 5                    # barg
+# P2 = 4                    # barg
+# T  = 20                   # °C
 
-P1 = P1*100000 + 101325   # Pa, absolut pressure
-P2 = P2*100000 + 101325   # Pa, absolut pressure
 
-# fludi parameters (water)
-MW = 16.04246          # g/mol, molecular weight
-K  = 1.306150523753    # -    , specific heat coefficient 
-Z1 = 0.9866770978914   # -    , compressibility factor ( 5 barg)
 
-# valve parameters
-Cmd = 1
-CvMAX = 100
-
-print("\n\n Valve Mass flow [kg/s]")
-
-print(valve_function(P1,P2,MW,K,T,Z1,Cmd,CvMAX))
+# print("\n\n Valve Mass flow [kg/s]")
+#
+# print(valve_function(P1,P2,MW,K,T,Z1,Cmd,CvMAX))
 

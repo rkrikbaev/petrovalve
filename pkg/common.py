@@ -9,7 +9,7 @@ import os
 
 class LinktoInfluxDB():
 
-    def __init__(self, host, port, user, password, database, measurement):
+    def __init__(self, host, port, user, password, database, measurement, time_presicion='s'):
         self.host = host
         self.port = port
         self.user = user
@@ -17,11 +17,11 @@ class LinktoInfluxDB():
         self.database = database
         self.measurement = measurement
         self.client = DataFrameClient(self.host, self.port, self.database)
+        self.time_presicion = time_presicion
 
     def get_data(self, query):
         try:
             list_of_df = self.client.query(query)
-            logger.debug(f'get some data {list_of_df.head()}')
             return list_of_df
         except Exception as e:
             logger.error(e)
@@ -33,7 +33,7 @@ class LinktoInfluxDB():
                                      measurement=self.measurement,
                                      field_columns=columns,
                                      batch_size=5000,
-                                     protocol='line')
-            logger.debug(f'put some data')
+                                     protocol='line',
+                                     time_precision=self.time_presicion)
         except Exception as e:
             logger.error(e)
