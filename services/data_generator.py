@@ -225,21 +225,21 @@ def _prep_df(path):
                     frame.set_index('ts', inplace=True)
 
                     # select data boolean dtype
-                    logger.debug(frame.columns)
+                    # logger.debug(frame.columns)
 
                     columns_state = list(filter(lambda x: x in valve_states, list(frame.columns)))
                     frame_state = frame[columns_state].copy()
                     frame_state.columns = [f'{name}_state' for name in list(frame_state.columns)]
-                    logger.debug(frame_state.columns)
-                    logger.debug(frame_state.head)
-                    logger.debug(frame_state.describe())
+                    # logger.debug(frame_state.columns)
+                    # logger.debug(frame_state.head)
+                    # logger.debug(frame_state.describe())
 
                     # filling NaN for a number dtypes
                     frame.fillna(method='ffill', inplace=True)
                     frame.fillna(method='backfill', inplace=True)
 
                     df_full = pd.concat([frame, frame_state])
-                    logger.debug(df_full.columns)
+                    # logger.debug(df_full.columns)
 
                     df_clean_bool_columns = list(df_full.columns)
                     df_clean_bool = df_full[df_clean_bool_columns].copy()
