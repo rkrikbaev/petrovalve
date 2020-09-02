@@ -260,6 +260,3 @@ def _prep_df(path):
     # result_df.to_csv('local/alldata.csv')
     return result_df
 
-
-while True:
-    flow(path='tmp')
