@@ -1,4 +1,5 @@
 import pandas as pd
+
 import numpy as np
 import time
 import datetime
@@ -157,48 +158,51 @@ influxdb_client = LinktoInfluxDB(host='157.230.120.158',
                                  time_presicion='ms')
 
 
-def flow(path):
+def flow(path, shift_date='True'):
     try:
         df = _prep_df(path)
-        # df =pd.read_csv(path)
-        _generate_data(influxdb_client, df)
+        _generate_data(influxdb_client, df, shift_date)
         logger.debug()
     except Exception as error:
         logger.error(error)
 
 
-def _generate_data(influxdb_client, df):
+def _generate_data(influxdb_client, df, shift_date):
+
     rows_df, col_df = df.shape
+    columns = df.columns
 
     for row_of_df in range(rows_df):
 
-        # receive customer date as unix time
-        ts = df.index.values[row_of_df]
+        # row from dataframe object
+        frame = pd.DataFrame(data=[df.iloc[row_of_df]])
 
-        # replace with current date
-        dt_now = date.today()
-        dt = datetime.utcfromtimestamp(ts)
-        datetime_new = dt.replace(dt_now.year, dt_now.month, dt_now.day)
-        # to timestamp
-        ts_sec = datetime_new.timestamp()
-        # new dataframe object with new datetime as index
-        df_new = pd.DataFrame(data=[df.iloc[row_of_df]])
+        if shift_date:
 
-        df_new.index = [np.datetime64(datetime_new)]
-        columns = df_new.columns
+            # receive customer date as unix time
+            # ts = pd.Timestamp(frame.index[row_of_df])
+            dt = pd.Timestamp(frame.index[0])
 
-        logger.debug(df_new.index)
-        logger.debug(datetime.today().timestamp())
-        logger.debug(ts_sec)
+            # replace with current date
+            dt_now = date.today()
+            datetime_new = dt.replace(dt_now.year, dt_now.month, dt_now.day)
 
-        while (datetime.today().timestamp()-ts_sec) < 10:
+            # set new index-timestamp
 
-            time.sleep(5)
-        else:
-            try:
-                influxdb_client.put_data(data=df_new, columns=columns)
-            except Exception as e:
-                logger.error(e)
+            frame.index = [np.datetime64(datetime_new)]
+
+            logger.debug(frame.index)
+            logger.debug(datetime.today().timestamp())
+
+            ts_sec = datetime_new.timestamp()
+            logger.debug(ts_sec)
+            while (datetime.today().timestamp()-ts_sec) < 10:
+                time.sleep(2)
+
+        try:
+            influxdb_client.put_data(data=frame, columns=columns)
+        except Exception as e:
+            logger.error(e)
 
 
 def _prep_df(path):
@@ -220,7 +224,7 @@ def _prep_df(path):
 
                     frame['ts'] = pd.to_datetime(frame['Time'], format='%Y.%m.%d %H:%M:%S.%f')
                     # df['dt'] = df['dt'].apply(lambda x: pd.Timestamp(x))
-                    frame['ts'] = frame['ts'].apply(lambda x: pd.Timestamp(x).timestamp())
+                    frame['ts'] = frame['ts'].apply(lambda x: pd.Timestamp(x))
                     # logger.debug(df.describe)
                     frame.set_index('ts', inplace=True)
 
